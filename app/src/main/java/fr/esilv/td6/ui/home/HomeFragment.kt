@@ -31,8 +31,7 @@ class HomeFragment : Fragment() {
 
     private lateinit var homeViewModel: HomeViewModel
     private val TAG = "HomeFragment"
-    //private val API_KEY = "AIzaSyDnCBylJZCs5wA460a-wNzKc88FY3a71P4"
-    private val API_KEY = "6707c229027cce084037a2264d4b4e8116f19f7953f03a8a942a8245e1278758"
+    private val API_KEY = "API_KEY"
     private lateinit var recyclerView: RecyclerView
     private lateinit var api: FootBallService
     //private lateinit var root: LayoutInflater
