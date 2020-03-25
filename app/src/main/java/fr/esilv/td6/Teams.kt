@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -30,7 +31,7 @@ interface OnTeamClickListener{
 
 
 class Teams : AppCompatActivity(), OnTeamClickListener {
-
+//class Teams : AppCompatActivity(){
 
 
     private lateinit var api: FootBallService
@@ -44,7 +45,7 @@ class Teams : AppCompatActivity(), OnTeamClickListener {
 
 
     override fun onItemClicked(teams: TeamsList) {
-        Toast.makeText(this,"Team name ${teams.team_name} \n Team ID:${teams.team_key}",  Toast.LENGTH_LONG).show()
+        /*Toast.makeText(this,"Team name ${teams.team_name} \n Team ID:${teams.team_key}",  Toast.LENGTH_LONG).show()
         Log.i("USER_",teams.team_name)
         teamName = teams.team_name
         teamId = teams.team_key.toInt()
@@ -52,13 +53,12 @@ class Teams : AppCompatActivity(), OnTeamClickListener {
         val intent = Intent(this, bottom::class.java)
         intent.putExtra("team_id", teams.team_key.toInt())
         intent.putExtra("team_name", teams.team_name)
-        intent.putExtra("league_id", leagueId)
+        intent.putExtra("league_id", leagueId)*/
         var SP_Fav : SharedPreferences = getSharedPreferences("MesFavoris", Context.MODE_PRIVATE)
         val editor = SP_Fav.edit()
-        editor.putString(teams.team_name+"_ID",teams.team_key)
-        editor.putString(teams.team_name+"_LID",leagueId.toString())
+        editor.putString(teams.team_name,teams.team_key+"_"+leagueId)
         editor.apply()
-        startActivity(intent)
+        //startActivity(intent)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -101,6 +101,7 @@ class Teams : AppCompatActivity(), OnTeamClickListener {
                     }
 
                     var sortedElements = elements.sortedWith(compareBy({ it.team_name }))
+                    //recyclerView.adapter = TeamAdapter(sortedElements)
                     recyclerView.adapter = TeamAdapter(sortedElements, click)
                 }
 
@@ -114,7 +115,7 @@ class Teams : AppCompatActivity(), OnTeamClickListener {
 
 
     class TeamAdapter(val itemList: List<TeamsList>, private val itemClickListener: OnTeamClickListener) : RecyclerView.Adapter<TeamAdapter.ViewHolder>() {
-
+    //class TeamAdapter(val itemList: List<TeamsList>) : RecyclerView.Adapter<TeamAdapter.ViewHolder>() {
         //this method is returning the view for each item in the list
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TeamAdapter.ViewHolder {
             val v = LayoutInflater.from(parent.context).inflate(R.layout.layout_teams, parent, false)
@@ -123,6 +124,7 @@ class Teams : AppCompatActivity(), OnTeamClickListener {
 
         //this method is binding the data on the list
         override fun onBindViewHolder(holder: TeamAdapter.ViewHolder, position: Int) {
+            //holder.bindItems(itemList[position])
             holder.bindItems(itemList[position], itemClickListener)
         }
 
@@ -135,14 +137,19 @@ class Teams : AppCompatActivity(), OnTeamClickListener {
         class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
             fun bindItems(item: TeamsList, clickListener: OnTeamClickListener) {
+            //fun bindItems(item: TeamsList) {
                 val teamName = itemView.findViewById<TextView>(R.id.textViewTeam)
                 val teamImg = itemView.findViewById<ImageView>(R.id.imageViewTeam)
                 teamName.text = item.team_name
                 Glide.with(itemView).load(item.team_badge).into(teamImg)
 
-                itemView.setOnClickListener{
+                val buttonFav = itemView.findViewById<Button>(R.id.button_fav)
+                buttonFav.setOnClickListener{
                     clickListener.onItemClicked(item)
                 }
+                /*itemView.setOnClickListener{
+                    clickListener.onItemClicked(item)
+                }*/
 
             }
         }
