@@ -9,13 +9,13 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="2dp">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="170dp"
             android:layout_height="170dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="10dp">
 
             <ImageView
                 android:id="@+id/imageViewleagueImg"
@@ -26,9 +26,9 @@
                 android:id="@+id/textViewleagueName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
                 android:textSize="15dp"
                 android:text="country_name"
+                android:gravity="center"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>

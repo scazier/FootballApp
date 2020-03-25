@@ -1,19 +1,21 @@
 package fr.esilv.td6.ui.home
 
-import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.inflate
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import fr.esilv.td6.R
+import fr.esilv.td6.Teams
+import fr.esilv.td6.TeamsList
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,59 +25,35 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 
-interface FootBallService{
-    @GET("?action=get_leagues")
-    fun getLeagues(@Query(value="country_id") country_id: Int, @Query(value="APIkey") apiKey: String): Call<List<Leagues>>
-}
-
-interface OnItemClickListener{
-    fun onItemClicked(leagues: Leagues)
-}
-
-/*
-interface FootBallService{
-    //@GET("search?part=snippet&type=video&maxResults=50")
-    @GET("?action=get_countries")
-    //fun search(@Query(value="q") query: String, @Query(value="key") apiKey: String): Call<SearchResult>
-    fun search(@Query(value="APIkey") apiKey: String): Call<List<SearchResult>>
-}*/
-
 class HomeFragment : Fragment(), OnItemClickListener {
 
     private lateinit var homeViewModel: HomeViewModel
     private val TAG = "HomeFragment"
-    private val API_KEY = "API_KEY"
+    private val API_KEY = KEYS.API_KEY
     private lateinit var recyclerView: RecyclerView
     private lateinit var api: FootBallService
 
     override fun onItemClicked(league: Leagues) {
         Toast.makeText(getActivity(),"League name ${league.league_name} \n League ID:${league.league_id}",  Toast.LENGTH_LONG).show()
         Log.i("USER_",league.league_name)
+        val intent = Intent(activity, Teams::class.java)
+        intent.putExtra("league_id", league.league_id.toInt())
+        intent.putExtra("league_name", league.league_name)
+        startActivity(intent)
     }
 
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
-        //val root = LayoutInflater.from(parent.context).inflate(R.layout.fragment_home, parent, false)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        //homeViewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
         var root = inflater.inflate(R.layout.fragment_home, container, false)
-        //val textView: TextView = root.findViewById(R.id.text_home)
-        //val back: Button = root.findViewById(R.id.back_button)
-        /*
-        homeViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
-         */
+
         recyclerView = root.findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = GridLayoutManager(getActivity(), 2)
-        //gridView = root.findViewById<GridView>(R.id.gridView)
-
-        // https://www.googleapis.com/youtube/v3/ https://apiv2.apifootball.com/
 
         val retrofit: Retrofit = Retrofit.Builder()
-            .baseUrl("https://apiv2.apifootball.com/")
+            .baseUrl(KEYS.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -134,7 +112,6 @@ class HomeFragment : Fragment(), OnItemClickListener {
         class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
             fun bindItems(item: Leagues, clickListener: OnItemClickListener) {
-                //val snippet: Snippet = item.snippet
                 val leagueName = itemView.findViewById<TextView>(R.id.textViewleagueName)
                 val leagueImg = itemView.findViewById<ImageView>(R.id.imageViewleagueImg)
                 leagueName.text = item.league_name
@@ -151,4 +128,23 @@ class HomeFragment : Fragment(), OnItemClickListener {
 }
 
 data class Leagues(val league_id: String, val league_name: String, val league_logo: String)
-data class SearchResult(val country_id: String, val country_name: String)
+
+interface FootBallService{
+    @GET("?action=get_leagues")
+    fun getLeagues(@Query(value="country_id") country_id: Int, @Query(value="APIkey") apiKey: String): Call<List<Leagues>>
+
+    @GET("?action=get_teams")
+    fun getTeams(@Query(value="league_id") league_id: Int, @Query(value="APIkey") apiKey: String): Call<List<TeamsList>>
+
+}
+
+interface OnItemClickListener{
+    fun onItemClicked(leagues: Leagues)
+}
+
+class KEYS{
+    companion object{
+        const val API_KEY: String = "API_KEY"
+        const val BASE_URL: String = "https://apiv2.apifootball.com/"
+    }
+}
