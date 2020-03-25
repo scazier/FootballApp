@@ -40,11 +40,16 @@ class Teams : AppCompatActivity(), OnTeamClickListener {
     private val API_KEY = KEYS.API_KEY
     private var leagueId: Int = -1
     private var leagueName: String = ""
+    private var teamId: Int = -1
+    private var teamName: String = ""
 
 
     override fun onItemClicked(teams: TeamsList) {
         /*Toast.makeText(this,"Team name ${teams.team_name} \n Team ID:${teams.team_key}",  Toast.LENGTH_LONG).show()
         Log.i("USER_",teams.team_name)
+        teamName = teams.team_name
+        teamId = teams.team_key.toInt()
+
         val intent = Intent(this, bottom::class.java)
         intent.putExtra("team_id", teams.team_key.toInt())
         intent.putExtra("team_name", teams.team_name)
@@ -52,7 +57,7 @@ class Teams : AppCompatActivity(), OnTeamClickListener {
         val FAVORIS : String = "MesFavoris"
         var SP_Fav : SharedPreferences = getSharedPreferences(FAVORIS, Context.MODE_PRIVATE)
         val editor = SP_Fav.edit()
-        editor.putString(teams.team_name,teams.team_key+"_"+leagueId)
+        editor.putString(teams.team_name,teams.team_key+"_"+leagueId+"_"+teams.team_badge)
         editor.apply()
         //startActivity(intent)
     }
@@ -154,6 +159,18 @@ class Teams : AppCompatActivity(), OnTeamClickListener {
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
+    }
+
+    fun getTeamId(): Int{
+        return teamId
+    }
+
+    fun getTeamName(): String{
+        return teamName
+    }
+
+    fun getLeagueId(): Int{
+        return leagueId
     }
 }
 

@@ -5,40 +5,158 @@ import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
 private val FAVORIS : String = "MesFavoris"
 
+interface OnFavouriteClickListener{
+    fun onFavouriteClicked(fav: TeamsList)
+}
 
-class MainActivity : AppCompatActivity() {
+
+class MainActivity : AppCompatActivity(), OnFavouriteClickListener {
+
+    private val TAG = "MainActivity"
+    private lateinit var recyclerView: RecyclerView
+
+    override fun onFavouriteClicked(teams: TeamsList) {
+        /*Toast.makeText(this,"Team name ${teams.team_name} \n Team ID:${teams.team_key}",  Toast.LENGTH_LONG).show()
+        Log.i("USER_",teams.team_name)
+        teamName = teams.team_name
+        teamId = teams.team_key.toInt()
+
+        val intent = Intent(this, bottom::class.java)
+        intent.putExtra("team_id", teams.team_key.toInt())
+        intent.putExtra("team_name", teams.team_name)
+        intent.putExtra("league_id", leagueId)*/
+        var SP_Fav : SharedPreferences = getSharedPreferences("DataTemp", Context.MODE_PRIVATE)
+        val editor = SP_Fav.edit()
+        editor.putString("teamID",teams.team_key)
+        editor.putString("leagueID",teams.team_key)
+        editor.apply()
+        //startActivity(intent)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        var SP_Fav : SharedPreferences = getSharedPreferences(FAVORIS, Context.MODE_PRIVATE)
+        var SP_Fav: SharedPreferences = getSharedPreferences(FAVORIS, Context.MODE_PRIVATE)
         println("Values in shared preferences")
         println(SP_Fav.all)
-        if (SP_Fav.getAll().size == 0 ){
-            val intent = Intent(this, Leagues :: class.java)
+        if (SP_Fav.getAll().isEmpty()) {
+            val intent = Intent(this, Leagues::class.java)
+            startActivity(intent)
+        } else {
+            setContentView(R.layout.activity_main)
+            recyclerView = findViewById<RecyclerView>(R.id.recyclerViewFavouriteTeams)
+            recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+
+            //var elements = ArrayList<TeamsList>()
+
+            val retrofit: Retrofit = Retrofit.Builder()
+                .baseUrl(KEYS.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+
+            var elements = ArrayList<TeamsList>()
+
+            //val allFavourites = SP_Fav.getAll()
+            val api = retrofit.create(FootBallService::class.java)
+            val click: OnFavouriteClickListener = this
+
+            SP_Fav.all.forEach{
+                val teamName = it.key
+                val str = it.value.toString().split('_').toTypedArray()
+                val teamId = str[0].toInt()
+                val leagueId = str[1].toInt()
+                Log.d("Team Name: ",teamName + "| Team Id: " + teamId + "| League Id: " + leagueId)
+
+                api.getTeamMajorArgs(teamId, KEYS.API_KEY).enqueue(object : Callback<List<TeamsList>> {
+
+                    override fun onResponse(call: Call<List<TeamsList>>, response: Response<List<TeamsList>>) {
+                        Log.d(TAG, "onResponse")
+                        if (response.code() == 200) {
+                            val result: List<TeamsList> = response.body()!!
+                            for (item in result){
+                                elements.add(item)
+                            }
+                        }
+
+                    }
+
+                    override fun onFailure(call: Call<List<TeamsList>>, t: Throwable?) {
+                        Log.e(TAG, "onFailure", t)
+                    }
+                })
+            }
+            println(elements)
+            recyclerView.adapter = FavouriteAdapter(elements, click)
+
+
+
+        }
+
+        setContentView(R.layout.activity_main)
+        val teamsButton = findViewById<Button>(R.id.addFavouriteButton)
+        teamsButton.setOnClickListener {
+            val intent = Intent(this, Leagues::class.java)
             startActivity(intent)
         }
-        else{
-            setContentView(R.layout.activity_main)
-            val button = findViewById<Button>(R.id.main_button)
-            button.setOnClickListener {
-                val intent = Intent(this, bottom::class.java)
-                startActivity(intent)
-            }
-            val teamsButton = findViewById<Button>(R.id.leagues_button)
-            teamsButton.setOnClickListener {
-                val intent = Intent(this, Leagues::class.java)
-                startActivity(intent)
+
+    }
+
+
+    class FavouriteAdapter(val itemList: List<TeamsList>, private val itemClickListener: OnFavouriteClickListener) : RecyclerView.Adapter<FavouriteAdapter.ViewHolder>() {
+
+        //this method is returning the view for each item in the list
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavouriteAdapter.ViewHolder {
+            val v = LayoutInflater.from(parent.context).inflate(R.layout.layout_list_favourite, parent, false)
+            return ViewHolder(v)
+        }
+
+        //this method is binding the data on the list
+        override fun onBindViewHolder(holder: FavouriteAdapter.ViewHolder, position: Int) {
+            holder.bindItems(itemList[position], itemClickListener)
+        }
+
+        //this method is giving the size of the list
+        override fun getItemCount(): Int {
+            return itemList.size
+        }
+
+        //the class is hodling the list view
+        class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+            fun bindItems(item: TeamsList, clickListener: OnFavouriteClickListener) {
+                val teamName = itemView.findViewById<TextView>(R.id.textViewFavouriteTeam)
+                val teamImg = itemView.findViewById<ImageView>(R.id.imageViewFavouriteTeam)
+                teamName.text = item.team_name
+                Glide.with(itemView).load(item.team_badge).into(teamImg)
+
+                itemView.setOnClickListener{
+                    clickListener.onFavouriteClicked(item)
+                }
+
             }
         }
     }
 }
+
 
 
 interface FootBallService{
@@ -48,9 +166,8 @@ interface FootBallService{
     @GET("?action=get_teams")
     fun getTeams(@Query(value="league_id") league_id: Int, @Query(value="APIkey") apiKey: String): Call<List<TeamsList>>
 
-    /*@GET("?action=get_teams")
-    fun getTeamDetail(@Query(value="team_id") team_id: Int, @Query(value="APIkey") apiKey: String): Call<List<TeamDetailList>>
-*/
+    @GET("?action=get_teams")
+    fun getTeamMajorArgs(@Query(value="team_id") team_id: Int, @Query(value="APIkey") apiKey: String): Call<List<TeamsList>>
 }
 
 
