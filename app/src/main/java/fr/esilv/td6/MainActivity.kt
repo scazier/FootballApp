@@ -26,14 +26,32 @@ import retrofit2.http.Query
 private val FAVORIS : String = "MesFavoris"
 
 interface OnFavouriteClickListener{
-    fun OnFavouriteClicked(fav: TeamsList)
+    fun onFavouriteClicked(fav: TeamsList)
 }
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), OnFavouriteClickListener {
 
     private val TAG = "MainActivity"
     private lateinit var recyclerView: RecyclerView
+
+    override fun onFavouriteClicked(teams: TeamsList) {
+        /*Toast.makeText(this,"Team name ${teams.team_name} \n Team ID:${teams.team_key}",  Toast.LENGTH_LONG).show()
+        Log.i("USER_",teams.team_name)
+        teamName = teams.team_name
+        teamId = teams.team_key.toInt()
+
+        val intent = Intent(this, bottom::class.java)
+        intent.putExtra("team_id", teams.team_key.toInt())
+        intent.putExtra("team_name", teams.team_name)
+        intent.putExtra("league_id", leagueId)*/
+        var SP_Fav : SharedPreferences = getSharedPreferences("DataTemp", Context.MODE_PRIVATE)
+        val editor = SP_Fav.edit()
+        editor.putString("teamID",teams.team_key)
+        editor.putString("leagueID",teams.team_key)
+        editor.apply()
+        //startActivity(intent)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,9 +90,7 @@ class MainActivity : AppCompatActivity() {
 
                     override fun onResponse(call: Call<List<TeamsList>>, response: Response<List<TeamsList>>) {
                         Log.d(TAG, "onResponse")
-                        println(response)
                         if (response.code() == 200) {
-                            println(response)
                             val result: List<TeamsList> = response.body()!!
                             for (item in result){
                                 elements.add(item)
@@ -88,7 +104,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 })
             }
-
+            println(elements)
             recyclerView.adapter = FavouriteAdapter(elements, click)
 
 
@@ -133,7 +149,7 @@ class MainActivity : AppCompatActivity() {
                 Glide.with(itemView).load(item.team_badge).into(teamImg)
 
                 itemView.setOnClickListener{
-                    clickListener.OnFavouriteClicked(item)
+                    clickListener.onFavouriteClicked(item)
                 }
 
             }
