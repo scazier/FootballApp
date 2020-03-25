@@ -1,6 +1,8 @@
 package fr.esilv.td6
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -26,7 +28,10 @@ interface OnTeamClickListener{
     fun onItemClicked(teams: TeamsList)
 }
 
+
 class Teams : AppCompatActivity(), OnTeamClickListener {
+
+
 
     private lateinit var api: FootBallService
     private lateinit var recyclerView: RecyclerView
@@ -48,6 +53,11 @@ class Teams : AppCompatActivity(), OnTeamClickListener {
         intent.putExtra("team_id", teams.team_key.toInt())
         intent.putExtra("team_name", teams.team_name)
         intent.putExtra("league_id", leagueId)
+        var SP_Fav : SharedPreferences = getSharedPreferences("MesFavoris", Context.MODE_PRIVATE)
+        val editor = SP_Fav.edit()
+        editor.putString(teams.team_name+"_ID",teams.team_key)
+        editor.putString(teams.team_name+"_LID",leagueId.toString())
+        editor.apply()
         startActivity(intent)
     }
 

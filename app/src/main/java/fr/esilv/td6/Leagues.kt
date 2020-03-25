@@ -124,6 +124,7 @@ class Leagues : AppCompatActivity(), OnItemClickListener {
         }
     }
 
+
 }
 
 data class League(val league_id: String, val league_name: String, val league_logo: String)

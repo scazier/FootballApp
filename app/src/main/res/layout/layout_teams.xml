@@ -27,6 +27,9 @@
             android:text="country_name"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:textSize="15dp" />
+
+
+
     </LinearLayout>
 
 </LinearLayout>
