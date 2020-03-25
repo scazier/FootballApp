@@ -13,9 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import fr.esilv.td6.FootBallService
-import fr.esilv.td6.KEYS
-import fr.esilv.td6.R
+import fr.esilv.td6.*
 import kotlinx.android.synthetic.main.layout_players.view.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -54,9 +52,10 @@ class HomeFragment : Fragment() {
         homeViewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_home, container, false)
 
-        //teamId = arguments!!.getInt("team_id")
-
-        //val teamId = getActivity()?.getIntent()?.getExtras()?.getInt("team_id", 1)
+        //teamId = (activity as Teams).getTeamId()
+        //teamId = arguments.getInt("team_id")
+        //var mainActivity: Teams = activity as Teams
+        //teamId = mainActivity.getTeamId()
 
         recyclerView = root.findViewById<RecyclerView>(R.id.recyclerViewTeamDetail)
         recyclerView.layoutManager = LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false)
@@ -74,7 +73,8 @@ class HomeFragment : Fragment() {
 
     fun launchSearch(){
         var elements = ArrayList<TeamDetailList>()
-        api.getTeamDetail(1, KEYS.API_KEY).enqueue(object : Callback<List<TeamDetailList>> {
+        println(teamId)
+        api.getTeamDetail(teamId, KEYS.API_KEY).enqueue(object : Callback<List<TeamDetailList>> {
 
             override fun onResponse(call: Call<List<TeamDetailList>>, response: Response<List<TeamDetailList>>) {
                 Log.d(TAG, "onResponse")

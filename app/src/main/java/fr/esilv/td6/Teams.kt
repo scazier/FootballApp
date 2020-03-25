@@ -34,11 +34,16 @@ class Teams : AppCompatActivity(), OnTeamClickListener {
     private val API_KEY = KEYS.API_KEY
     private var leagueId: Int = -1
     private var leagueName: String = ""
+    private var teamId: Int = -1
+    private var teamName: String = ""
 
 
     override fun onItemClicked(teams: TeamsList) {
         Toast.makeText(this,"Team name ${teams.team_name} \n Team ID:${teams.team_key}",  Toast.LENGTH_LONG).show()
         Log.i("USER_",teams.team_name)
+        teamName = teams.team_name
+        teamId = teams.team_key.toInt()
+
         val intent = Intent(this, bottom::class.java)
         intent.putExtra("team_id", teams.team_key.toInt())
         intent.putExtra("team_name", teams.team_name)
@@ -136,6 +141,18 @@ class Teams : AppCompatActivity(), OnTeamClickListener {
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
+    }
+
+    fun getTeamId(): Int{
+        return teamId
+    }
+
+    fun getTeamName(): String{
+        return teamName
+    }
+
+    fun getLeagueId(): Int{
+        return leagueId
     }
 }
 

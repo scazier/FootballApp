@@ -36,9 +36,8 @@ interface FootBallService{
     @GET("?action=get_teams")
     fun getTeams(@Query(value="league_id") league_id: Int, @Query(value="APIkey") apiKey: String): Call<List<TeamsList>>
 
-    /*@GET("?action=get_teams")
+    @GET("?action=get_teams")
     fun getTeamDetail(@Query(value="team_id") team_id: Int, @Query(value="APIkey") apiKey: String): Call<List<TeamDetailList>>
-*/
 }
 
 
