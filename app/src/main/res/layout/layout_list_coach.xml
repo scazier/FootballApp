@@ -1,6 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:padding="5dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/textViewCoachName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="coach_name"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:textSize="10dp" />
+
+        <TextView
+            android:id="@+id/textViewCoachCountry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="coach_country"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:textSize="10dp"
+            android:background = "@drawable/left_black_border"/>
+
+        <TextView
+            android:id="@+id/textViewCoachAge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="coach_age"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:textSize="10dp"
+            android:background = "@drawable/left_black_border"/>
+
+    </LinearLayout>
 
 </LinearLayout>

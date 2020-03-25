@@ -32,14 +32,17 @@ class Teams : AppCompatActivity(), OnTeamClickListener {
     private lateinit var recyclerView: RecyclerView
     private val TAG = "TeamsActivity"
     private val API_KEY = KEYS.API_KEY
+    private var leagueId: Int = -1
+    private var leagueName: String = ""
 
 
     override fun onItemClicked(teams: TeamsList) {
-        Toast.makeText(this,"League name ${teams.team_name} \n League ID:${teams.team_key}",  Toast.LENGTH_LONG).show()
+        Toast.makeText(this,"Team name ${teams.team_name} \n Team ID:${teams.team_key}",  Toast.LENGTH_LONG).show()
         Log.i("USER_",teams.team_name)
-        val intent = Intent(this, bottom::class.java)
-        intent.putExtra("team_id", teams.team_key)
+        val intent = Intent(this, TeamDetail::class.java)
+        intent.putExtra("team_id", teams.team_key.toInt())
         intent.putExtra("team_name", teams.team_name)
+        intent.putExtra("league_id", leagueId)
         startActivity(intent)
     }
 
@@ -47,8 +50,8 @@ class Teams : AppCompatActivity(), OnTeamClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_teams)
 
-        val leagueId = intent.getIntExtra("league_id", 1)
-        val leagueName = intent.getStringExtra("league_name")
+        leagueId = intent.getIntExtra("league_id", 1)
+        leagueName = intent.getStringExtra("league_name")
         val actionbar = supportActionBar
         actionbar!!.title = leagueName
         actionbar.setDisplayHomeAsUpEnabled(true)
@@ -76,7 +79,10 @@ class Teams : AppCompatActivity(), OnTeamClickListener {
                     val result: List<TeamsList> = response.body()!!
 
                     for (team in result){
-                        elements.add(team)
+                        // Some teams don't have any players inside so we don't take them
+                        if (team.players.isNotEmpty()) {
+                            elements.add(team)
+                        }
                     }
 
                     var sortedElements = elements.sortedWith(compareBy({ it.team_name }))
@@ -133,4 +139,5 @@ class Teams : AppCompatActivity(), OnTeamClickListener {
     }
 }
 
-data class TeamsList(val team_key: String, val team_name: String, val team_badge: String)
+data class TeamsList(val team_key: String, val team_name: String, val team_badge: String, val players: List<TestPLayer>)
+data class TestPLayer(val player_name: String)

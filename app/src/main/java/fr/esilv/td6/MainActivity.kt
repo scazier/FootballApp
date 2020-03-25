@@ -37,14 +37,14 @@ interface FootBallService{
     fun getTeams(@Query(value="league_id") league_id: Int, @Query(value="APIkey") apiKey: String): Call<List<TeamsList>>
 
     @GET("?action=get_teams")
-    fun getTeamDetail(@Query(value="team_id") league_id: Int, @Query(value="APIkey") apiKey: String): Call<List<TeamDetailList>>
+    fun getTeamDetail(@Query(value="team_id") team_id: Int, @Query(value="APIkey") apiKey: String): Call<List<TeamDetailList>>
 
 }
 
 
 class KEYS{
     companion object{
-        const val API_KEY: String = "API_KEY"
+        const val API_KEY: String = "6707c229027cce084037a2264d4b4e8116f19f7953f03a8a942a8245e1278758"
         const val BASE_URL: String = "https://apiv2.apifootball.com/"
     }
 }

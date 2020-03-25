@@ -7,12 +7,29 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import fr.esilv.td6.ui.home.HomeFragment
 
 class bottom : AppCompatActivity() {
+
+    private var teamId: Int = -1
+    private var teamName: String = ""
+    private var leagueId: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bottom)
+
+        teamId = intent.getIntExtra("team_id", 1)
+        teamName = intent.getStringExtra("team_name")
+        leagueId = intent.getIntExtra("league_id", 1)
+
+        savedInstanceState?.putString("teamName", teamName)
+        savedInstanceState?.putInt("teamId", teamId)
+        savedInstanceState?.putInt("leagueId", leagueId)
+
+        val homeFragment = HomeFragment()
+        homeFragment.arguments = savedInstanceState
+
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
 
         val navController = findNavController(R.id.nav_host_fragment)
@@ -26,4 +43,17 @@ class bottom : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }
+
+    fun getTeamId(): Int{
+        return teamId
+    }
+
+    fun getTeamName(): String{
+        return teamName
+    }
+
+    fun getLeagueId(): Int{
+        return leagueId
+    }
+
 }
