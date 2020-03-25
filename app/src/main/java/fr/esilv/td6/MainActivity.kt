@@ -16,5 +16,11 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, bottom::class.java)
             startActivity(intent)
         }
+
+        val teamsButton = findViewById<Button>(R.id.teams_button)
+        teamsButton.setOnClickListener {
+            val intent = Intent(this, Teams::class.java)
+            startActivity(intent)
+        }
     }
 }

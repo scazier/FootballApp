@@ -5,4 +5,6 @@
     <string name="title_dashboard">Matchs</string>
     <string name="title_notifications">Favoris</string>
     <string name="back_button">Retour</string>
+    <string name="country">Pays</string>
+    <string name="league">Ligue</string>
 </resources>

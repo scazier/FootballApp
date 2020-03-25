@@ -1,16 +1,18 @@
 package fr.esilv.td6.ui.home
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.inflate
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.*
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
+import com.bumptech.glide.Glide
 import fr.esilv.td6.R
 import retrofit2.Call
 import retrofit2.Callback
@@ -20,21 +22,36 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
+
+interface FootBallService{
+    @GET("?action=get_leagues")
+    fun getLeagues(@Query(value="country_id") country_id: Int, @Query(value="APIkey") apiKey: String): Call<List<Leagues>>
+}
+
+interface OnItemClickListener{
+    fun onItemClicked(leagues: Leagues)
+}
+
+/*
 interface FootBallService{
     //@GET("search?part=snippet&type=video&maxResults=50")
     @GET("?action=get_countries")
     //fun search(@Query(value="q") query: String, @Query(value="key") apiKey: String): Call<SearchResult>
     fun search(@Query(value="APIkey") apiKey: String): Call<List<SearchResult>>
-}
+}*/
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), OnItemClickListener {
 
     private lateinit var homeViewModel: HomeViewModel
     private val TAG = "HomeFragment"
     private val API_KEY = "API_KEY"
     private lateinit var recyclerView: RecyclerView
     private lateinit var api: FootBallService
-    //private lateinit var root: LayoutInflater
+
+    override fun onItemClicked(league: Leagues) {
+        Toast.makeText(getActivity(),"League name ${league.league_name} \n League ID:${league.league_id}",  Toast.LENGTH_LONG).show()
+        Log.i("USER_",league.league_name)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
@@ -52,7 +69,8 @@ class HomeFragment : Fragment() {
         })
          */
         recyclerView = root.findViewById<RecyclerView>(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false)
+        recyclerView.layoutManager = GridLayoutManager(getActivity(), 2)
+        //gridView = root.findViewById<GridView>(R.id.gridView)
 
         // https://www.googleapis.com/youtube/v3/ https://apiv2.apifootball.com/
 
@@ -62,31 +80,31 @@ class HomeFragment : Fragment() {
             .build()
 
         api = retrofit.create(FootBallService::class.java)
-        launchSearch()
+        launchSearch(this)
         return root
     }
 
-    fun launchSearch() {
-        var countries = ArrayList<SearchResult>()
-        val call: Call<List<SearchResult>> = api.search(API_KEY)
-        call.enqueue(object: Callback<List<SearchResult>> {
+    fun launchSearch(click: OnItemClickListener) {
+        var leagues = ArrayList<Leagues>()
+        api.getLeagues(46, API_KEY).enqueue(object: Callback<List<Leagues>> {
 
-            override fun onResponse(call: Call<List<SearchResult>>, response: Response<List<SearchResult>>) {
+            override fun onResponse(call: Call<List<Leagues>>, response: Response<List<Leagues>>) {
                 Log.d(TAG, "onResponse")
                 if (response.code() == 200) {
-                    val result : List<SearchResult> = response.body()!!
+                    val result : List<Leagues> = response.body()!!
                     println(result)
                     //val listItems : List<SearchItem> = result.items
 
-                    for (country in result){
-                        countries.add(country)
+                    for (league in result){
+                        leagues.add(league)
                     }
 
-                    recyclerView.adapter = CustomAdapter(countries)
+                    var customAdapter = CustomAdapter(leagues, click)
+                    recyclerView.adapter = customAdapter
                 }
             }
 
-            override fun onFailure(call: Call<List<SearchResult>>, t: Throwable?) {
+            override fun onFailure(call: Call<List<Leagues>>, t: Throwable?) {
                 println("Bug Failure")
                 Log.e(TAG, "onFailure", t)
             }
@@ -94,7 +112,7 @@ class HomeFragment : Fragment() {
     }
 
 
-    class CustomAdapter(val itemList: List<SearchResult>) : RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
+    class CustomAdapter(val itemList: List<Leagues>, val itemClickListener: OnItemClickListener) : RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
 
         //this method is returning the view for each item in the list
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomAdapter.ViewHolder {
@@ -104,7 +122,7 @@ class HomeFragment : Fragment() {
 
         //this method is binding the data on the list
         override fun onBindViewHolder(holder: CustomAdapter.ViewHolder, position: Int) {
-            holder.bindItems(itemList[position])
+            holder.bindItems(itemList[position], itemClickListener)
         }
 
         //this method is giving the size of the list
@@ -115,26 +133,22 @@ class HomeFragment : Fragment() {
         //the class is hodling the list view
         class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-            fun bindItems(item: SearchResult) {
+            fun bindItems(item: Leagues, clickListener: OnItemClickListener) {
                 //val snippet: Snippet = item.snippet
-                val textViewName = itemView.findViewById<TextView>(R.id.textViewCountryName)
-                val textViewDesc  = itemView.findViewById<TextView>(R.id.textViewCountryId)
-                //val imageViewThumbnail = itemView.findViewById<ImageView>(R.id.imageThumbnail)
-                textViewName.text = item.country_id
-                textViewDesc.text = item.country_name
-                //Glide.with(itemView).load(snippet.thumbnails.default.url).into(imageViewThumbnail)
+                val leagueName = itemView.findViewById<TextView>(R.id.textViewleagueName)
+                val leagueImg = itemView.findViewById<ImageView>(R.id.imageViewleagueImg)
+                leagueName.text = item.league_name
+                Glide.with(itemView).load(item.league_logo).into(leagueImg)
 
-                itemView.setOnClickListener(View.OnClickListener {
-                    fun onClick(v: View){
-                        //DetailActivity().start(v.getContext(), item.id.videoId)
-                    }
-                })
+                itemView.setOnClickListener{
+                    clickListener.onItemClicked(item)
+                }
 
             }
         }
     }
 
-
 }
 
+data class Leagues(val league_id: String, val league_name: String, val league_logo: String)
 data class SearchResult(val country_id: String, val country_name: String)
