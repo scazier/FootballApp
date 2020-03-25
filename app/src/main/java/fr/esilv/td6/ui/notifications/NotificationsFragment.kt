@@ -1,5 +1,7 @@
 package fr.esilv.td6.ui.notifications
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -23,17 +25,25 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
+private val TMP:String = "DataTemp"
+
 interface FootBallService{
     @GET("?action=get_standings")
-    fun search(@Query(value="league_id")league_id: String, @Query(value="APIkey") apiKey: String): Call<List<SearchStandings>>
+    fun search(@Query(value="league_id")league_id: String?, @Query(value="APIkey") apiKey: String): Call<List<SearchStandings>>
 }
 
 class NotificationsFragment : Fragment() {
 
+    fun getLeagueId(sp_name : String) : String?{
+        val SPID : SharedPreferences = activity!!.getSharedPreferences(sp_name, Context.MODE_PRIVATE)
+        val leagueid : String? = SPID.getString("leagueID",null)
+        return leagueid
+    }
+
     private lateinit var notificationsViewModel: NotificationsViewModel
     private val TAG = "StandingsFragment"
     private val API_KEY = KEYS.API_KEY
-    private val LEAGUE_ID = "176"
+    private val LEAGUE_ID = getLeagueId(TMP)
     private lateinit var recyclerView: RecyclerView
     private lateinit var api: FootBallService
 

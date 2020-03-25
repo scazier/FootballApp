@@ -49,7 +49,8 @@ class Teams : AppCompatActivity(), OnTeamClickListener {
         intent.putExtra("team_id", teams.team_key.toInt())
         intent.putExtra("team_name", teams.team_name)
         intent.putExtra("league_id", leagueId)*/
-        var SP_Fav : SharedPreferences = getSharedPreferences("MesFavoris", Context.MODE_PRIVATE)
+        val FAVORIS : String = "MesFavoris"
+        var SP_Fav : SharedPreferences = getSharedPreferences(FAVORIS, Context.MODE_PRIVATE)
         val editor = SP_Fav.edit()
         editor.putString(teams.team_name,teams.team_key+"_"+leagueId)
         editor.apply()

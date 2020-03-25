@@ -1,5 +1,7 @@
 package fr.esilv.td6.ui.dashboard
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,8 +10,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -23,17 +23,25 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
+private val TMP:String = "DataTemp"
 interface FootBallService{
     @GET("?action=get_events&from=2019-02-01&to=2019-06-20")
-    fun search(@Query(value="team_id")team_id: String, @Query(value="APIkey") apiKey: String): Call<List<SearchEvents>>
+    fun search(@Query(value="team_id")team_id: String?, @Query(value="APIkey") apiKey: String): Call<List<SearchEvents>>
 }
 
 class DashboardFragment : Fragment() {
 
+    fun getTeamId(sp_name : String) : String?{
+        val SPID : SharedPreferences = activity!!.getSharedPreferences(sp_name, Context.MODE_PRIVATE)
+        val teamid : String? = SPID.getString("teamID",null)
+        return teamid
+    }
+
+
     private lateinit var dashboardViewModel: DashboardViewModel
     private val TAG = "GamesFragment"
     private val API_KEY = KEYS.API_KEY
-    private val TEAM_ID = "3040"
+    private val TEAM_ID = getTeamId(TMP)
     private lateinit var recyclerView: RecyclerView
     private lateinit var api: FootBallService
 

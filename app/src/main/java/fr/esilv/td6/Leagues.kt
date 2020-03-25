@@ -45,6 +45,9 @@ class Leagues : AppCompatActivity(), OnItemClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_leagues)
+        val actionbar = supportActionBar
+        actionbar!!.title = "Choix de ligue"
+        actionbar.setDisplayHomeAsUpEnabled(true)
 
         var recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = GridLayoutManager(this, 2)
@@ -123,8 +126,10 @@ class Leagues : AppCompatActivity(), OnItemClickListener {
             }
         }
     }
-
-
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
 }
 
 data class League(val league_id: String, val league_name: String, val league_logo: String)

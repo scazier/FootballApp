@@ -1,6 +1,8 @@
 package fr.esilv.td6.ui.home
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -25,16 +27,24 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
+private val TMP:String = "DataTemp"
 interface FetchTeams{
     @GET("?action=get_teams")
-    fun getTeamDetail(@Query(value="team_id") team_id: Int, @Query(value="APIkey") apiKey: String): Call<List<TeamDetailList>>
+    fun getTeamDetail(@Query(value="team_id") team_id: String?, @Query(value="APIkey") apiKey: String): Call<List<TeamDetailList>>
 }
 
 
 
 class HomeFragment : Fragment() {
 
+    fun getTeamId(sp_name : String) : String?{
+        val SPID : SharedPreferences = activity!!.getSharedPreferences(sp_name, Context.MODE_PRIVATE)
+        val teamid : String? = SPID.getString("teamID",null)
+        return teamid
+    }
+
     private val TAG = "List players"
+    private val TEAM_ID = getTeamId(TMP)
     private lateinit var homeViewModel: HomeViewModel
     private lateinit var api: FetchTeams
     private lateinit var recyclerView: RecyclerView
@@ -74,7 +84,7 @@ class HomeFragment : Fragment() {
 
     fun launchSearch(){
         var elements = ArrayList<TeamDetailList>()
-        api.getTeamDetail(1, KEYS.API_KEY).enqueue(object : Callback<List<TeamDetailList>> {
+        api.getTeamDetail(TEAM_ID, KEYS.API_KEY).enqueue(object : Callback<List<TeamDetailList>> {
 
             override fun onResponse(call: Call<List<TeamDetailList>>, response: Response<List<TeamDetailList>>) {
                 Log.d(TAG, "onResponse")
