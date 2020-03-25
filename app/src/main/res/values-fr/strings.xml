@@ -9,5 +9,5 @@
     <string name="league">Ligue</string>
     <string name="players">Joueurs</string>
     <string name="coachs">Entraineurs</string>
-
+    <string name="team">Equipe</string>
 </resources>
