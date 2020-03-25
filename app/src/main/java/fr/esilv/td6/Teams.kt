@@ -14,10 +14,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import fr.esilv.td6.ui.home.FootBallService
-import fr.esilv.td6.ui.home.KEYS
-import fr.esilv.td6.ui.home.Leagues
-import fr.esilv.td6.ui.home.OnItemClickListener
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -26,11 +22,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface OnTeamlickListener{
+interface OnTeamClickListener{
     fun onItemClicked(teams: TeamsList)
 }
 
-class Teams : AppCompatActivity(), OnTeamlickListener {
+class Teams : AppCompatActivity(), OnTeamClickListener {
 
     private lateinit var api: FootBallService
     private lateinit var recyclerView: RecyclerView
@@ -41,10 +37,10 @@ class Teams : AppCompatActivity(), OnTeamlickListener {
     override fun onItemClicked(teams: TeamsList) {
         Toast.makeText(this,"League name ${teams.team_name} \n League ID:${teams.team_key}",  Toast.LENGTH_LONG).show()
         Log.i("USER_",teams.team_name)
-        //val intent = Intent(this, Teams::class.java)
-        //intent.putExtra("league_id", teams.team_key)
-        //intent.putExtra("league_name", teams.team_name)
-        //startActivity(intent)
+        val intent = Intent(this, bottom::class.java)
+        intent.putExtra("team_id", teams.team_key)
+        intent.putExtra("team_name", teams.team_name)
+        startActivity(intent)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,7 +64,7 @@ class Teams : AppCompatActivity(), OnTeamlickListener {
             .build()
 
         val api = retrofit.create(FootBallService::class.java)
-        val click: OnTeamlickListener = this
+        val click: OnTeamClickListener = this
 
         api.getTeams(leagueId, API_KEY).enqueue(object : Callback<List<TeamsList>> {
 
@@ -96,7 +92,7 @@ class Teams : AppCompatActivity(), OnTeamlickListener {
     }
 
 
-    class TeamAdapter(val itemList: List<TeamsList>, private val itemClickListener: OnTeamlickListener) : RecyclerView.Adapter<TeamAdapter.ViewHolder>() {
+    class TeamAdapter(val itemList: List<TeamsList>, private val itemClickListener: OnTeamClickListener) : RecyclerView.Adapter<TeamAdapter.ViewHolder>() {
 
         //this method is returning the view for each item in the list
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TeamAdapter.ViewHolder {
@@ -117,7 +113,7 @@ class Teams : AppCompatActivity(), OnTeamlickListener {
         //the class is hodling the list view
         class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-            fun bindItems(item: TeamsList, clickListener: OnTeamlickListener) {
+            fun bindItems(item: TeamsList, clickListener: OnTeamClickListener) {
                 val teamName = itemView.findViewById<TextView>(R.id.textViewTeam)
                 val teamImg = itemView.findViewById<ImageView>(R.id.imageViewTeam)
                 teamName.text = item.team_name
