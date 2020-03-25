@@ -10,4 +10,5 @@
     <string name="players">Players</string>
     <string name="coachs">Coachs</string>
     <string name="team">Team</string>
+    <string name="Add_Fav">Add to favorite</string>
 </resources>
