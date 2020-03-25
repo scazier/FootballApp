@@ -9,7 +9,7 @@
     android:gravity="center">
 
     <ImageView
-        android:id="@+id/imageViewTeam"
+        android:id="@+id/imageViewFavouriteTeam"
         android:layout_width="80dp"
         android:layout_height="80dp" />
 
@@ -20,7 +20,7 @@
         android:padding="10dp">
 
         <TextView
-            android:id="@+id/textViewTeam"
+            android:id="@+id/textViewFavouriteTeam"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"

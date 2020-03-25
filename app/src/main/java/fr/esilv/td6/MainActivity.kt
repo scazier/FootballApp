@@ -33,7 +33,6 @@ interface OnFavouriteClickListener{
 class MainActivity : AppCompatActivity() {
 
     private val TAG = "MainActivity"
-    private lateinit var api: FootBallService
     private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,7 +45,6 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         } else {
             setContentView(R.layout.activity_main)
-
             recyclerView = findViewById<RecyclerView>(R.id.recyclerViewFavouriteTeams)
             recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
 
@@ -57,40 +55,47 @@ class MainActivity : AppCompatActivity() {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 
-            api = retrofit.create(FootBallService::class.java)
-            //val click: OnTeamClickListener = this
             var elements = ArrayList<TeamsList>()
 
-            val allFavourites = SP_Fav.getAll()
+            //val allFavourites = SP_Fav.getAll()
+            val api = retrofit.create(FootBallService::class.java)
+            val click: OnFavouriteClickListener = this
 
             SP_Fav.all.forEach{
-                Log.d("Preferences values",it.key + ": " + it.value)
-            }
+                val teamName = it.key
+                val str = it.value.toString().split('_').toTypedArray()
+                val teamId = str[0].toInt()
+                val leagueId = str[1].toInt()
+                Log.d("Team Name: ",teamName + "| Team Id: " + teamId + "| League Id: " + leagueId)
 
+                api.getTeamMajorArgs(teamId, KEYS.API_KEY).enqueue(object : Callback<List<TeamsList>> {
 
-            //launchSearch(elemnts, click)
-            /*val teamId: Int = 0
-            api.getTeamMajorArgs(teamId, KEYS.API_KEY).enqueue(object : Callback<List<TeamsList>> {
-
-                override fun onResponse(call: Call<List<TeamsList>>, response: Response<List<TeamsList>>) {
-                    Log.d(TAG, "onResponse")
-                    println(response)
-                    if (response.code() == 200) {
+                    override fun onResponse(call: Call<List<TeamsList>>, response: Response<List<TeamsList>>) {
+                        Log.d(TAG, "onResponse")
                         println(response)
-                        val result: List<TeamsList> = response.body()!!
-                        return result
-                        //recyclerView.adapter = FavouriteAdapter(sortedElements, click)
+                        if (response.code() == 200) {
+                            println(response)
+                            val result: List<TeamsList> = response.body()!!
+                            for (item in result){
+                                elements.add(item)
+                            }
+                        }
+
                     }
 
-                }
+                    override fun onFailure(call: Call<List<TeamsList>>, t: Throwable?) {
+                        Log.e(TAG, "onFailure", t)
+                    }
+                })
+            }
 
-                override fun onFailure(call: Call<List<TeamsList>>, t: Throwable?) {
-                    Log.e(TAG, "onFailure", t)
-                }
-            })*/
+            recyclerView.adapter = FavouriteAdapter(elements, click)
+
+
+
         }
 
-
+        setContentView(R.layout.activity_main)
         val teamsButton = findViewById<Button>(R.id.addFavouriteButton)
         teamsButton.setOnClickListener {
             val intent = Intent(this, Leagues::class.java)
@@ -100,12 +105,11 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    /*
-    class FavouriteAdapter(val itemList: List<TeamsList>, private val itemClickListener: OnFavouriteClickListener) : RecyclerView.Adapter<Teams.TeamAdapter.ViewHolder>() {
+    class FavouriteAdapter(val itemList: List<TeamsList>, private val itemClickListener: OnFavouriteClickListener) : RecyclerView.Adapter<FavouriteAdapter.ViewHolder>() {
 
         //this method is returning the view for each item in the list
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavouriteAdapter.ViewHolder {
-            val v = LayoutInflater.from(parent.context).inflate(R.layout.layout_teams, parent, false)
+            val v = LayoutInflater.from(parent.context).inflate(R.layout.layout_list_favourite, parent, false)
             return ViewHolder(v)
         }
 
@@ -120,11 +124,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         //the class is hodling the list view
-        class ViewHolder(itemView: View, clickListener: OnFavouriteClickListener) : RecyclerView.ViewHolder(itemView) {
+        class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
             fun bindItems(item: TeamsList, clickListener: OnFavouriteClickListener) {
-                val teamName = itemView.findViewById<TextView>(R.id.textViewTeam)
-                val teamImg = itemView.findViewById<ImageView>(R.id.imageViewTeam)
+                val teamName = itemView.findViewById<TextView>(R.id.textViewFavouriteTeam)
+                val teamImg = itemView.findViewById<ImageView>(R.id.imageViewFavouriteTeam)
                 teamName.text = item.team_name
                 Glide.with(itemView).load(item.team_badge).into(teamImg)
 
@@ -135,7 +139,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-    */
 }
 
 
