@@ -39,7 +39,7 @@ class Teams : AppCompatActivity(), OnTeamClickListener {
     override fun onItemClicked(teams: TeamsList) {
         Toast.makeText(this,"Team name ${teams.team_name} \n Team ID:${teams.team_key}",  Toast.LENGTH_LONG).show()
         Log.i("USER_",teams.team_name)
-        val intent = Intent(this, TeamDetail::class.java)
+        val intent = Intent(this, bottom::class.java)
         intent.putExtra("team_id", teams.team_key.toInt())
         intent.putExtra("team_name", teams.team_name)
         intent.putExtra("league_id", leagueId)

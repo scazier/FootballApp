@@ -57,7 +57,7 @@ class TeamDetail : AppCompatActivity(){
 
         val api = retrofit.create(FootBallService::class.java)
 
-        api.getTeamDetail(teamId, API_KEY).enqueue(object : Callback<List<TeamDetailList>> {
+        /*api.getTeamDetail(teamId, API_KEY).enqueue(object : Callback<List<TeamDetailList>> {
 
             override fun onResponse(call: Call<List<TeamDetailList>>, response: Response<List<TeamDetailList>>) {
                 Log.d(TAG, "onResponse")
@@ -78,7 +78,7 @@ class TeamDetail : AppCompatActivity(){
             override fun onFailure(call: Call<List<TeamDetailList>>, t: Throwable?) {
                 Log.e(TAG, "onFailure", t)
             }
-        })
+        })*/
     }
 
     class TeamDetailAdapter(private val itemList: List<TeamDetailList>) : RecyclerView.Adapter<TeamDetailAdapter.ViewHolder>() {
