@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import fr.esilv.td6.KEYS
 import fr.esilv.td6.R
 import retrofit2.Call
 import retrofit2.Callback
@@ -31,7 +32,7 @@ class DashboardFragment : Fragment() {
 
     private lateinit var dashboardViewModel: DashboardViewModel
     private val TAG = "GamesFragment"
-    private val API_KEY = "API_KEY"
+    private val API_KEY = KEYS.API_KEY
     private val TEAM_ID = "3040"
     private lateinit var recyclerView: RecyclerView
     private lateinit var api: FootBallService

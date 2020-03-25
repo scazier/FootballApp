@@ -19,7 +19,7 @@ class bottom : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bottom)
 
-        teamId = intent.getIntExtra("team_id", 1)
+        /*teamId = intent.getIntExtra("team_id", 1)
         teamName = intent.getStringExtra("team_name")
         leagueId = intent.getIntExtra("league_id", 1)
 
@@ -28,7 +28,7 @@ class bottom : AppCompatActivity() {
         savedInstanceState?.putInt("leagueId", leagueId)
 
         val homeFragment = HomeFragment()
-        homeFragment.arguments = savedInstanceState
+        homeFragment.arguments = savedInstanceState*/
 
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
 
