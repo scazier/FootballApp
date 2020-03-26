@@ -48,9 +48,12 @@ class MainActivity : AppCompatActivity(), OnFavouriteClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
         var SP_Fav: SharedPreferences = getSharedPreferences(FAVORIS, Context.MODE_PRIVATE)
         println("Values in shared preferences")
         println(SP_Fav.all)
+
         if (SP_Fav.getAll().isEmpty()) {
             val intent = Intent(this, Leagues::class.java)
             startActivity(intent)
@@ -79,14 +82,13 @@ class MainActivity : AppCompatActivity(), OnFavouriteClickListener {
             recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
             recyclerView.adapter = FavouriteAdapter(elements, click)
         }
-        /*
-        setContentView(R.layout.activity_main)
+
         val teamsButton = findViewById<Button>(R.id.addFavouriteButton)
         teamsButton.setOnClickListener {
             val intent = Intent(this, Leagues::class.java)
             startActivity(intent)
         }
-        */
+
     }
 
 
