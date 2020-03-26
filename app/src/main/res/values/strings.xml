@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TD6</string>
+    <string name="app_name">Foot App</string>
     <string name="title_activity_bottom">bottom</string>
     <string name="title_home">Players</string>
     <string name="title_dashboard">Games</string>
