@@ -57,7 +57,7 @@ class Teams : AppCompatActivity(), OnTeamClickListener {
         val FAVORIS : String = "MesFavoris"
         var SP_Fav : SharedPreferences = getSharedPreferences(FAVORIS, Context.MODE_PRIVATE)
         val editor = SP_Fav.edit()
-        editor.putString(teams.team_name,teams.team_key+"_"+leagueId+"_"+teams.team_badge)
+        editor.putString(teams.team_name,teams.team_key+"|"+leagueId+"|"+teams.team_badge)
         editor.apply()
         //startActivity(intent)
     }

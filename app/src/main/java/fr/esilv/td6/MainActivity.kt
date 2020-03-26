@@ -32,7 +32,6 @@ interface OnFavouriteClickListener{
 class MainActivity : AppCompatActivity(), OnFavouriteClickListener {
 
     private val TAG = "MainActivity"
-    private lateinit var recyclerView: RecyclerView
 
     override fun onFavouriteClicked(teams: FavouriteTeams) {
         /*Toast.makeText(this,"Team name ${teams.team_name} \n Team ID:${teams.team_key}",  Toast.LENGTH_LONG).show()
@@ -62,25 +61,22 @@ class MainActivity : AppCompatActivity(), OnFavouriteClickListener {
             startActivity(intent)
         } else {
             setContentView(R.layout.activity_main)
-            recyclerView = findViewById<RecyclerView>(R.id.recyclerViewFavouriteTeams)
-            recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-
             //var elements = ArrayList<TeamsList>()
 
-            val retrofit: Retrofit = Retrofit.Builder()
+            /*val retrofit: Retrofit = Retrofit.Builder()
                 .baseUrl(KEYS.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
-                .build()
+                .build()*/
 
-            var elements = ArrayList<FavouriteTeams>()
+            var elements: ArrayList<FavouriteTeams> = ArrayList<FavouriteTeams>()
 
             //val allFavourites = SP_Fav.getAll()
-            val api = retrofit.create(FootBallService::class.java)
+            //val api = retrofit.create(FootBallService::class.java)
             val click: OnFavouriteClickListener = this
 
             SP_Fav.all.forEach{
                 val teamName = it.key
-                val str = it.value.toString().split('_').toTypedArray()
+                val str = it.value.toString().split('|').toTypedArray()
                 val teamId = str[0].toInt()
                 val leagueId = str[1].toInt()
                 val logoUrl = str[2]
@@ -90,16 +86,18 @@ class MainActivity : AppCompatActivity(), OnFavouriteClickListener {
             }
             Log.e(TAG, "end of requests")
             println(elements)
+            var recyclerView = findViewById<RecyclerView>(R.id.recyclerViewFavouriteTeams)
+            recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
             recyclerView.adapter = FavouriteAdapter(elements, click)
         }
-
+        /*
         setContentView(R.layout.activity_main)
         val teamsButton = findViewById<Button>(R.id.addFavouriteButton)
         teamsButton.setOnClickListener {
             val intent = Intent(this, Leagues::class.java)
             startActivity(intent)
         }
-
+        */
     }
 
 
