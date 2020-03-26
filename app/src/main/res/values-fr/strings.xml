@@ -10,12 +10,13 @@
     <string name="players">Joueurs</string>
     <string name="coachs">Entraineurs</string>
     <string name="team">Equipe</string>
-    <string name="Add_Fav">Ajouter aux favoris</string>
+    <string name="Add_Fav">Ajouter</string>
+    <string name="Rem_Fav">Retirer</string>
     <string name="allMatch">Matchs: </string>
     <string name="goals">But: </string>
     <string name="yellows">Jaune: </string>
     <string name="reds">Rouge: </string>
     <string name="number">Numéro: </string>
     <string name="age">Age: </string>
-
+    <string name="addedToFav">ajoutée aux favoris</string>
 </resources>

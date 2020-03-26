@@ -3,8 +3,10 @@ package fr.esilv.td6
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.Settings.Global.getString
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -13,10 +15,12 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.Resource
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -28,6 +32,8 @@ import retrofit2.http.Query
 interface OnTeamClickListener{
     fun onItemClicked(teams: TeamsList)
 }
+
+private val FAVORIS : String = "MesFavoris"
 
 
 class Teams : AppCompatActivity(), OnTeamClickListener {
@@ -42,18 +48,14 @@ class Teams : AppCompatActivity(), OnTeamClickListener {
     private var leagueName: String = ""
     private var teamId: Int = -1
     private var teamName: String = ""
+    private lateinit var pref: SharedPreferences
+    private lateinit var rem: String
 
 
     override fun onItemClicked(teams: TeamsList) {
-        /*Toast.makeText(this,"Team name ${teams.team_name} \n Team ID:${teams.team_key}",  Toast.LENGTH_LONG).show()
+        Toast.makeText(this,"${teams.team_name} "+ getString(R.string.addedToFav),  Toast.LENGTH_LONG).show()
         Log.i("USER_",teams.team_name)
-        teamName = teams.team_name
-        teamId = teams.team_key.toInt()
 
-        val intent = Intent(this, bottom::class.java)
-        intent.putExtra("team_id", teams.team_key.toInt())
-        intent.putExtra("team_name", teams.team_name)
-        intent.putExtra("league_id", leagueId)*/
         val FAVORIS : String = "MesFavoris"
         var SP_Fav : SharedPreferences = getSharedPreferences(FAVORIS, Context.MODE_PRIVATE)
         val editor = SP_Fav.edit()
@@ -65,6 +67,10 @@ class Teams : AppCompatActivity(), OnTeamClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_teams)
+
+        pref = getSharedPreferences(FAVORIS, Context.MODE_PRIVATE)
+        RESOURCES.add = getString(R.string.Add_Fav)
+        RESOURCES.removeColor = R.color.remColor
 
         leagueId = intent.getIntExtra("league_id", 1)
         leagueName = intent.getStringExtra("league_name")
@@ -103,7 +109,7 @@ class Teams : AppCompatActivity(), OnTeamClickListener {
 
                     var sortedElements = elements.sortedWith(compareBy({ it.team_name }))
                     //recyclerView.adapter = TeamAdapter(sortedElements)
-                    recyclerView.adapter = TeamAdapter(sortedElements, click)
+                    recyclerView.adapter = TeamAdapter(sortedElements, click, pref)
                 }
 
             }
@@ -115,7 +121,7 @@ class Teams : AppCompatActivity(), OnTeamClickListener {
     }
 
 
-    class TeamAdapter(val itemList: List<TeamsList>, private val itemClickListener: OnTeamClickListener) : RecyclerView.Adapter<TeamAdapter.ViewHolder>() {
+    class TeamAdapter(val itemList: List<TeamsList>, private val itemClickListener: OnTeamClickListener, private val pref: SharedPreferences) : RecyclerView.Adapter<TeamAdapter.ViewHolder>() {
     //class TeamAdapter(val itemList: List<TeamsList>) : RecyclerView.Adapter<TeamAdapter.ViewHolder>() {
         //this method is returning the view for each item in the list
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TeamAdapter.ViewHolder {
@@ -126,7 +132,7 @@ class Teams : AppCompatActivity(), OnTeamClickListener {
         //this method is binding the data on the list
         override fun onBindViewHolder(holder: TeamAdapter.ViewHolder, position: Int) {
             //holder.bindItems(itemList[position])
-            holder.bindItems(itemList[position], itemClickListener)
+            holder.bindItems(itemList[position], itemClickListener, pref)
         }
 
         //this method is giving the size of the list
@@ -137,7 +143,7 @@ class Teams : AppCompatActivity(), OnTeamClickListener {
         //the class is hodling the list view
         class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-            fun bindItems(item: TeamsList, clickListener: OnTeamClickListener) {
+            fun bindItems(item: TeamsList, clickListener: OnTeamClickListener, pref: SharedPreferences) {
             //fun bindItems(item: TeamsList) {
                 val teamName = itemView.findViewById<TextView>(R.id.textViewTeam)
                 val teamImg = itemView.findViewById<ImageView>(R.id.imageViewTeam)
@@ -145,8 +151,23 @@ class Teams : AppCompatActivity(), OnTeamClickListener {
                 Glide.with(itemView).load(item.team_badge).into(teamImg)
 
                 val buttonFav = itemView.findViewById<Button>(R.id.button_fav)
+
+                pref.all.forEach{
+                    val teamName= it.key
+                    println(teamName + " - " + item.team_name + " - " + item.team_name.equals(teamName, ignoreCase = true))
+                    if (item.team_name.equals(teamName)){
+                        buttonFav.text = RESOURCES.added
+                        //buttonFav.setBackgroundColor(RESOURCES.removeColor)
+                    }
+                    /*else{
+                        buttonFav.text = RESOURCES.add
+                    }*/
+                }
+
                 buttonFav.setOnClickListener{
-                    clickListener.onItemClicked(item)
+                    if (buttonFav.text !== RESOURCES.added) {
+                        clickListener.onItemClicked(item)
+                    }
                 }
                 /*itemView.setOnClickListener{
                     clickListener.onItemClicked(item)
@@ -176,3 +197,11 @@ class Teams : AppCompatActivity(), OnTeamClickListener {
 
 data class TeamsList(val team_key: String, val team_name: String, val team_badge: String, val players: List<TestPLayer>)
 data class TestPLayer(val player_name: String)
+
+class RESOURCES{
+    companion object{
+        var added: String = "Added"
+        var removeColor: Int = -1
+        var add: String = ""
+    }
+}
