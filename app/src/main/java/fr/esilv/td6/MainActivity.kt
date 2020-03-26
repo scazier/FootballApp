@@ -3,7 +3,6 @@ package fr.esilv.td6
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,21 +11,21 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 private val FAVORIS : String = "MesFavoris"
 
 interface OnFavouriteClickListener{
-    fun onFavouriteClicked(fav: TeamsList)
+    fun onFavouriteClicked(fav: FavouriteTeams)
 }
 
 
@@ -35,7 +34,7 @@ class MainActivity : AppCompatActivity(), OnFavouriteClickListener {
     private val TAG = "MainActivity"
     private lateinit var recyclerView: RecyclerView
 
-    override fun onFavouriteClicked(teams: TeamsList) {
+    override fun onFavouriteClicked(teams: FavouriteTeams) {
         /*Toast.makeText(this,"Team name ${teams.team_name} \n Team ID:${teams.team_key}",  Toast.LENGTH_LONG).show()
         Log.i("USER_",teams.team_name)
         teamName = teams.team_name
@@ -47,8 +46,8 @@ class MainActivity : AppCompatActivity(), OnFavouriteClickListener {
         intent.putExtra("league_id", leagueId)*/
         var SP_Fav : SharedPreferences = getSharedPreferences("DataTemp", Context.MODE_PRIVATE)
         val editor = SP_Fav.edit()
-        editor.putString("teamID",teams.team_key)
-        editor.putString("leagueID",teams.team_key)
+        editor.putString("teamID",teams.teamId.toString())
+        editor.putString("leagueID",teams.leagueId.toString())
         editor.apply()
         //startActivity(intent)
     }
@@ -73,7 +72,7 @@ class MainActivity : AppCompatActivity(), OnFavouriteClickListener {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 
-            var elements = ArrayList<TeamsList>()
+            var elements = ArrayList<FavouriteTeams>()
 
             //val allFavourites = SP_Fav.getAll()
             val api = retrofit.create(FootBallService::class.java)
@@ -84,31 +83,14 @@ class MainActivity : AppCompatActivity(), OnFavouriteClickListener {
                 val str = it.value.toString().split('_').toTypedArray()
                 val teamId = str[0].toInt()
                 val leagueId = str[1].toInt()
-                Log.d("Team Name: ",teamName + "| Team Id: " + teamId + "| League Id: " + leagueId)
+                val logoUrl = str[2]
+                Log.d("Team Name: ",teamName + "| Team Id: " + teamId + "| League Id: " + leagueId + "| Logo URL: " + logoUrl)
 
-                api.getTeamMajorArgs(teamId, KEYS.API_KEY).enqueue(object : Callback<List<TeamsList>> {
-
-                    override fun onResponse(call: Call<List<TeamsList>>, response: Response<List<TeamsList>>) {
-                        Log.d(TAG, "onResponse")
-                        if (response.code() == 200) {
-                            val result: List<TeamsList> = response.body()!!
-                            for (item in result){
-                                elements.add(item)
-                            }
-                        }
-
-                    }
-
-                    override fun onFailure(call: Call<List<TeamsList>>, t: Throwable?) {
-                        Log.e(TAG, "onFailure", t)
-                    }
-                })
+                elements.add(FavouriteTeams(teamId, leagueId, teamName, logoUrl))
             }
+            Log.e(TAG, "end of requests")
             println(elements)
             recyclerView.adapter = FavouriteAdapter(elements, click)
-
-
-
         }
 
         setContentView(R.layout.activity_main)
@@ -121,7 +103,7 @@ class MainActivity : AppCompatActivity(), OnFavouriteClickListener {
     }
 
 
-    class FavouriteAdapter(val itemList: List<TeamsList>, private val itemClickListener: OnFavouriteClickListener) : RecyclerView.Adapter<FavouriteAdapter.ViewHolder>() {
+    class FavouriteAdapter(val itemList: List<FavouriteTeams>, private val itemClickListener: OnFavouriteClickListener) : RecyclerView.Adapter<FavouriteAdapter.ViewHolder>() {
 
         //this method is returning the view for each item in the list
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavouriteAdapter.ViewHolder {
@@ -142,11 +124,11 @@ class MainActivity : AppCompatActivity(), OnFavouriteClickListener {
         //the class is hodling the list view
         class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-            fun bindItems(item: TeamsList, clickListener: OnFavouriteClickListener) {
+            fun bindItems(item: FavouriteTeams, clickListener: OnFavouriteClickListener) {
                 val teamName = itemView.findViewById<TextView>(R.id.textViewFavouriteTeam)
                 val teamImg = itemView.findViewById<ImageView>(R.id.imageViewFavouriteTeam)
-                teamName.text = item.team_name
-                Glide.with(itemView).load(item.team_badge).into(teamImg)
+                teamName.text = item.teamName
+                Glide.with(itemView).load(item.logoUrl).into(teamImg)
 
                 itemView.setOnClickListener{
                     clickListener.onFavouriteClicked(item)
@@ -157,7 +139,7 @@ class MainActivity : AppCompatActivity(), OnFavouriteClickListener {
     }
 }
 
-
+data class FavouriteTeams(val teamId: Int, val leagueId: Int, val teamName: String, val logoUrl: String)
 
 interface FootBallService{
     @GET("?action=get_leagues")
@@ -170,6 +152,8 @@ interface FootBallService{
     fun getTeamMajorArgs(@Query(value="team_id") team_id: Int, @Query(value="APIkey") apiKey: String): Call<List<TeamsList>>
 }
 
+
+data class UserApiResponse(val data: String)
 
 class KEYS{
     companion object{
