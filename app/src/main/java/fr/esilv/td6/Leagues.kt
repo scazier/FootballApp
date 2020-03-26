@@ -77,6 +77,7 @@ class Leagues : AppCompatActivity(), OnItemClickListener {
 
                         for (league in result) {
                             leagues.add(league)
+                            println(league)
                         }
 
                         var customAdapter = CustomAdapter(leagues, click)
