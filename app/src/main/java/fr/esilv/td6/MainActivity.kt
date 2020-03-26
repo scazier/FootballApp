@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import fr.esilv.td6.ui.home.HomeFragment
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -34,21 +35,13 @@ class MainActivity : AppCompatActivity(), OnFavouriteClickListener {
     private val TAG = "MainActivity"
 
     override fun onFavouriteClicked(teams: FavouriteTeams) {
-        /*Toast.makeText(this,"Team name ${teams.team_name} \n Team ID:${teams.team_key}",  Toast.LENGTH_LONG).show()
-        Log.i("USER_",teams.team_name)
-        teamName = teams.team_name
-        teamId = teams.team_key.toInt()
-
         val intent = Intent(this, bottom::class.java)
-        intent.putExtra("team_id", teams.team_key.toInt())
-        intent.putExtra("team_name", teams.team_name)
-        intent.putExtra("league_id", leagueId)*/
         var SP_Fav : SharedPreferences = getSharedPreferences("DataTemp", Context.MODE_PRIVATE)
         val editor = SP_Fav.edit()
         editor.putString("teamID",teams.teamId.toString())
         editor.putString("leagueID",teams.leagueId.toString())
         editor.apply()
-        //startActivity(intent)
+        startActivity(intent)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

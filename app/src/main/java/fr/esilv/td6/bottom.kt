@@ -19,13 +19,16 @@ class bottom : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bottom)
 
+        /*
         teamId = intent.getIntExtra("team_id", 1)
         teamName = intent.getStringExtra("team_name")
         leagueId = intent.getIntExtra("league_id", 1)
 
         val bundle = Bundle()
         bundle.putInt("team_id", teamId)
-        /*teamId = Teams().getTeamId()*/
+
+        teamId = Teams().getTeamId()*/
+
 
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
 
