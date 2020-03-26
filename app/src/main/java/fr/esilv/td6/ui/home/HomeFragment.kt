@@ -36,13 +36,12 @@ interface FetchTeams{
 class HomeFragment : Fragment() {
 
     fun getTeamId(sp_name : String) : String?{
-        val SPID : SharedPreferences = activity!!.getSharedPreferences(sp_name, Context.MODE_PRIVATE)
+        val SPID : SharedPreferences = this.activity!!.getSharedPreferences(sp_name, Context.MODE_PRIVATE)
         val teamid : String? = SPID.getString("teamID",null)
         return teamid
     }
 
     private val TAG = "List players"
-    private val TEAM_ID = getTeamId(TMP)
     private lateinit var homeViewModel: HomeViewModel
     private lateinit var api: FetchTeams
     private lateinit var recyclerView: RecyclerView
@@ -52,10 +51,6 @@ class HomeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        /*val activity: bottom = (bottom) getActivity()
-        val teamId = (activity).getTeamId()
-        val teamName = intent.getStringExtra("team_name")
-        val leagueId = intent.getIntExtra("league_id", 1)*/
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -84,7 +79,7 @@ class HomeFragment : Fragment() {
     fun launchSearch(){
         var elements = ArrayList<TeamDetailList>()
 
-        api.getTeamDetail(TEAM_ID, KEYS.API_KEY).enqueue(object : Callback<List<TeamDetailList>> {
+        api.getTeamDetail(TEMPDATA.teamID.toString(), KEYS.API_KEY).enqueue(object : Callback<List<TeamDetailList>> {
 
 
             override fun onResponse(call: Call<List<TeamDetailList>>, response: Response<List<TeamDetailList>>) {

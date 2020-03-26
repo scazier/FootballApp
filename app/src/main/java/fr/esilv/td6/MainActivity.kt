@@ -41,6 +41,8 @@ class MainActivity : AppCompatActivity(), OnFavouriteClickListener {
         editor.putString("teamID",teams.teamId.toString())
         editor.putString("leagueID",teams.leagueId.toString())
         editor.apply()
+        intent.putExtra("team_id", teams.teamId)
+        intent.putExtra("league_id", teams.leagueId)
         startActivity(intent)
     }
 
@@ -54,12 +56,6 @@ class MainActivity : AppCompatActivity(), OnFavouriteClickListener {
             startActivity(intent)
         } else {
             setContentView(R.layout.activity_main)
-            //var elements = ArrayList<TeamsList>()
-
-            /*val retrofit: Retrofit = Retrofit.Builder()
-                .baseUrl(KEYS.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()*/
 
             var elements: ArrayList<FavouriteTeams> = ArrayList<FavouriteTeams>()
 

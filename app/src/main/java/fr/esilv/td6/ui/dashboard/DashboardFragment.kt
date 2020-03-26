@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import fr.esilv.td6.KEYS
 import fr.esilv.td6.R
+import fr.esilv.td6.TEMPDATA
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -31,17 +32,10 @@ interface FootBallService{
 
 class DashboardFragment : Fragment() {
 
-    fun getTeamId(sp_name : String) : String?{
-        val SPID : SharedPreferences = activity!!.getSharedPreferences(sp_name, Context.MODE_PRIVATE)
-        val teamid : String? = SPID.getString("teamID",null)
-        return teamid
-    }
 
 
     private lateinit var dashboardViewModel: DashboardViewModel
     private val TAG = "GamesFragment"
-    private val API_KEY = KEYS.API_KEY
-    private val TEAM_ID = getTeamId(TMP)
     private lateinit var recyclerView: RecyclerView
     private lateinit var api: FootBallService
 
@@ -64,7 +58,7 @@ class DashboardFragment : Fragment() {
     }
     fun launchSearch() {
         var events = ArrayList<SearchEvents>()
-        val call: Call<List<SearchEvents>> = api.search(TEAM_ID,API_KEY)
+        val call: Call<List<SearchEvents>> = api.search(TEMPDATA.teamID.toString(),KEYS.API_KEY)
         call.enqueue(object: Callback<List<SearchEvents>> {
 
             override fun onResponse(call: Call<List<SearchEvents>>, response: Response<List<SearchEvents>>) {

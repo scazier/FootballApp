@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import fr.esilv.td6.KEYS
 import fr.esilv.td6.R
+import fr.esilv.td6.TEMPDATA
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -34,16 +35,8 @@ interface FootBallService{
 
 class NotificationsFragment : Fragment() {
 
-    fun getLeagueId(sp_name : String) : String?{
-        val SPID : SharedPreferences = activity!!.getSharedPreferences(sp_name, Context.MODE_PRIVATE)
-        val leagueid : String? = SPID.getString("leagueID",null)
-        return leagueid
-    }
-
     private lateinit var notificationsViewModel: NotificationsViewModel
     private val TAG = "StandingsFragment"
-    private val API_KEY = KEYS.API_KEY
-    private val LEAGUE_ID = getLeagueId(TMP)
     private lateinit var recyclerView: RecyclerView
     private lateinit var api: FootBallService
 
@@ -66,7 +59,7 @@ class NotificationsFragment : Fragment() {
     }
     fun launchSearch() {
         var standings = ArrayList<SearchStandings>()
-        val call: Call<List<SearchStandings>> = api.search(LEAGUE_ID,API_KEY)
+        val call: Call<List<SearchStandings>> = api.search(TEMPDATA.leagueID.toString(),KEYS.API_KEY)
         call.enqueue(object: Callback<List<SearchStandings>> {
 
             override fun onResponse(call: Call<List<SearchStandings>>, response: Response<List<SearchStandings>>) {
