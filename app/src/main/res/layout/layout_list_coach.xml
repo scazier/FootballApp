@@ -1,52 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center"
-    android:orientation="horizontal"
-    android:padding="5dp">
+    android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/textViewCoachName"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="5dp">
+        android:text="Viera Patrick"
+        android:textSize="20sp"
+        app:layout_constraintHorizontal_bias="0.054"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/textViewCoachName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="5dp"
-            android:text="coach_name"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            android:textSize="10dp" />
+    <TextView
+        android:id="@+id/textViewHelprAge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="@string/age"
+        android:textSize="10dp"
+        app:layout_constraintStart_toStartOf="@id/textViewCoachName"
+        app:layout_constraintTop_toBottomOf="@id/textViewCoachName" />
 
-        <TextView
-            android:id="@+id/textViewCoachCountry"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="5dp"
-            android:text="coach_country"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            android:textSize="10dp"
-            android:background = "@drawable/left_black_border"/>
+    <TextView
+        android:id="@+id/textViewCoachAge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="4dp"
+        android:text="50"
+        android:textSize="10dp"
+        app:layout_constraintStart_toEndOf="@id/textViewHelprAge"
+        app:layout_constraintTop_toBottomOf="@id/textViewCoachName" />
 
-        <TextView
-            android:id="@+id/textViewCoachAge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="5dp"
-            android:text="coach_age"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            android:textSize="10dp"
-            android:background = "@drawable/left_black_border"/>
+    <TextView
+        android:id="@+id/textViewHelpCountry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="@string/country"
+        android:textSize="10dp"
+        app:layout_constraintHorizontal_bias="0.244"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewCoachName" />
 
-    </LinearLayout>
+    <TextView
+        android:id="@+id/textViewCoachCountry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="4dp"
+        android:text="France"
+        android:textSize="10dp"
+        app:layout_constraintStart_toEndOf="@id/textViewHelpCountry"
+        app:layout_constraintTop_toBottomOf="@id/textViewCoachName" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

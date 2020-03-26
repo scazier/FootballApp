@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">TD6</string>
     <string name="title_activity_bottom">bottom</string>
-    <string name="title_home">News</string>
+    <string name="title_home">Players</string>
     <string name="title_dashboard">Games</string>
-    <string name="title_notifications">Favorite</string>
+    <string name="title_notifications">Standings</string>
     <string name="back_button">Back</string>
     <string name="country">Country</string>
     <string name="league">League</string>
