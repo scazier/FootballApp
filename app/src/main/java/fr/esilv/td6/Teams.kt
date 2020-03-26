@@ -167,6 +167,7 @@ class Teams : AppCompatActivity(), OnTeamClickListener {
                 buttonFav.setOnClickListener{
                     if (buttonFav.text !== RESOURCES.added) {
                         clickListener.onItemClicked(item)
+                        buttonFav.text = RESOURCES.added
                     }
                 }
                 /*itemView.setOnClickListener{
