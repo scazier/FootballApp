@@ -12,108 +12,231 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:padding="2dp">
 
-            <TextView
-                android:id="@+id/textViewPlayerName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="5dp"
-                android:text="player_name"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-                android:textSize="10dp" />
 
-            <TextView
-                android:id="@+id/textViewPlayerNumber"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/left_black_border"
-                android:gravity="center"
-                android:padding="5dp"
-                android:text="player_number"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-                android:textSize="10dp" />
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/textViewPlayerAge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/left_black_border"
-                android:gravity="center"
-                android:padding="5dp"
-                android:text="player_age"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-                android:textSize="10dp" />
+                <TextView
+                    android:id="@+id/textViewPlayerName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="player_name"
+                    android:textSize="20dp" />
 
-            <TextView
-                android:id="@+id/textViewPlayerCountry"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/left_black_border"
-                android:gravity="center"
-                android:padding="5dp"
-                android:text="player_country"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-                android:textSize="10dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" - "/>
 
-            <TextView
-                android:id="@+id/textViewPlayerType"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/left_black_border"
-                android:gravity="center"
-                android:padding="5dp"
-                android:text="player_type"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-                android:textSize="10dp" />
+                <TextView
+                    android:id="@+id/textViewNumberHelp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="@string/number"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                    android:textSize="10dp" />
 
-            <TextView
-                android:id="@+id/textViewPlayerMatchPlayed"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/left_black_border"
-                android:gravity="center"
-                android:padding="5dp"
-                android:text="player_match"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-                android:textSize="10dp" />
+                <TextView
+                    android:id="@+id/textViewPlayerNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="player_number"
+                    android:textSize="10dp" />
 
-            <TextView
-                android:id="@+id/textViewPlayerGoals"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/left_black_border"
-                android:gravity="center"
-                android:padding="5dp"
-                android:text="player_goals"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-                android:textSize="10dp" />
+            </LinearLayout>
 
-            <TextView
-                android:id="@+id/textViewPlayerYellowCards"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/left_black_border"
-                android:padding="5dp"
-                android:text="player_yellow"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-                android:textSize="10dp" />
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/textViewPlayerRedCards"
+                <TextView
+                    android:id="@+id/textViewHelprAge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="@string/age"
+                    android:textSize="10dp" />
+
+                <TextView
+                    android:id="@+id/textViewPlayerAge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="player_age"
+                    android:textSize="10dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" - "/>
+
+                <TextView
+                    android:id="@+id/textViewHelpCountry"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="@string/country"
+                    android:textSize="10dp" />
+
+                <TextView
+                    android:id="@+id/textViewPlayerCountry"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="player_country"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                    android:textSize="10dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/textViewHelpType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="Poste:"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                    android:textSize="10dp" />
+
+                <TextView
+                    android:id="@+id/textViewPlayerType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="player_type"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                    android:textSize="10dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" - "/>
+
+                <TextView
+                    android:id="@+id/textViewPlayerHelp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="@string/allMatch"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                    android:textSize="10dp" />
+
+                <TextView
+                    android:id="@+id/textViewPlayerMatchPlayed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="player_match"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                    android:textSize="10dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/textViewGoalHelp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="@string/goals"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                    android:textSize="10dp" />
+
+                <TextView
+                    android:id="@+id/textViewPlayerGoals"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="player_goals"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                    android:textSize="10dp" />
+
+                <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/left_black_border"
-                android:padding="5dp"
-                android:text="player_red"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-                android:textSize="10dp" />
+                android:text=" - "/>
+
+                <TextView
+                    android:id="@+id/textViewYellowHelp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="@string/yellows"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                    android:textSize="10dp" />
+
+                <TextView
+                    android:id="@+id/textViewPlayerYellowCards"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:text="player_yellow"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                    android:textSize="10dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" - "/>
+
+                <TextView
+                    android:id="@+id/textViewRedsHelp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="@string/reds"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                    android:textSize="10dp" />
+
+                <TextView
+                    android:id="@+id/textViewPlayerRedCards"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:text="player_red"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                    android:textSize="10dp" />
+            </LinearLayout>
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

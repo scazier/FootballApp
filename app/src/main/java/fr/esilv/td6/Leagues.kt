@@ -25,6 +25,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
+import kotlin.reflect.typeOf
 
 class Leagues : AppCompatActivity(), OnItemClickListener {
 
@@ -126,6 +127,13 @@ class Leagues : AppCompatActivity(), OnItemClickListener {
             }
         }
     }
+
+    override fun onBackPressed() {
+        var intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+
+    }
+
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true

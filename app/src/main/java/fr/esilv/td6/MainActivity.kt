@@ -58,29 +58,7 @@ class MainActivity : AppCompatActivity(), OnFavouriteClickListener {
             val intent = Intent(this, Leagues::class.java)
             startActivity(intent)
         } else {
-            setContentView(R.layout.activity_main)
-
-            var elements: ArrayList<FavouriteTeams> = ArrayList<FavouriteTeams>()
-
-            //val allFavourites = SP_Fav.getAll()
-            //val api = retrofit.create(FootBallService::class.java)
-            val click: OnFavouriteClickListener = this
-
-            SP_Fav.all.forEach{
-                val teamName = it.key
-                val str = it.value.toString().split('|').toTypedArray()
-                val teamId = str[0].toInt()
-                val leagueId = str[1].toInt()
-                val logoUrl = str[2]
-                Log.d("Team Name: ",teamName + "| Team Id: " + teamId + "| League Id: " + leagueId + "| Logo URL: " + logoUrl)
-
-                elements.add(FavouriteTeams(teamId, leagueId, teamName, logoUrl))
-            }
-            Log.e(TAG, "end of requests")
-            println(elements)
-            var recyclerView = findViewById<RecyclerView>(R.id.recyclerViewFavouriteTeams)
-            recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-            recyclerView.adapter = FavouriteAdapter(elements, click)
+            displayFavouriteTeams(SP_Fav)
         }
 
         val teamsButton = findViewById<Button>(R.id.addFavouriteButton)
@@ -89,6 +67,27 @@ class MainActivity : AppCompatActivity(), OnFavouriteClickListener {
             startActivity(intent)
         }
 
+    }
+
+    fun displayFavouriteTeams(SP_Fav: SharedPreferences){
+        var elements: ArrayList<FavouriteTeams> = ArrayList<FavouriteTeams>()
+
+        val click: OnFavouriteClickListener = this
+
+        SP_Fav.all.forEach{
+            val teamName = it.key
+            val str = it.value.toString().split('|').toTypedArray()
+            val teamId = str[0].toInt()
+            val leagueId = str[1].toInt()
+            val logoUrl = str[2]
+            Log.d("Team Name: ",teamName + "| Team Id: " + teamId + "| League Id: " + leagueId + "| Logo URL: " + logoUrl)
+
+            elements.add(FavouriteTeams(teamId, leagueId, teamName, logoUrl))
+        }
+        val sortedElement = elements.sortedWith(compareBy({ it.teamName }))
+        var recyclerView = findViewById<RecyclerView>(R.id.recyclerViewFavouriteTeams)
+        recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+        recyclerView.adapter = FavouriteAdapter(sortedElement, click)
     }
 
 

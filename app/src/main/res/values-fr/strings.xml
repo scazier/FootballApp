@@ -11,5 +11,11 @@
     <string name="coachs">Entraineurs</string>
     <string name="team">Equipe</string>
     <string name="Add_Fav">Ajouter aux favoris</string>
+    <string name="allMatch">Matchs: </string>
+    <string name="goals">But: </string>
+    <string name="yellows">Jaune: </string>
+    <string name="reds">Rouge: </string>
+    <string name="number">Numéro: </string>
+    <string name="age">Age: </string>
 
 </resources>

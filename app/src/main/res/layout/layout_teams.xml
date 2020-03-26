@@ -33,8 +33,11 @@
 
     <Button
         android:id="@+id/button_fav"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/Add_Fav"/>
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/addteam"
+        android:text="+"
+        android:textColor="#FFF"
+        android:padding="20dp" />
 
 </LinearLayout>

@@ -37,13 +37,6 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/playerTitle" />
 
-
-        android:id="@+id/coachLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/playerLayout">
-
         <TextView
             android:id="@+id/coachTitle"
             android:layout_width="match_parent"
